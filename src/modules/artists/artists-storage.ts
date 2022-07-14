@@ -20,12 +20,9 @@ export class ArtistsDataBase {
   }
 
   update(id: string, newArtist: UpdateArtistDto) {
-    this.artists.map((item) => {
-      if (item.id === id) {
-        return { ...item, ...newArtist };
-      }
-    });
-    return this.artists.find((artist) => artist.id === id);
+    const artist = this.artists.find((artist) => artist.id === id);
+    Object.assign(artist, newArtist);
+    return artist;
   }
 
   delete(id: string) {
