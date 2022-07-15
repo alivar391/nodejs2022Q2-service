@@ -33,7 +33,7 @@ export class AlbumsController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    return this.albumsService.findOne(+id);
+    return this.albumsService.findOne(id);
   }
 
   @Put(':id')
@@ -42,12 +42,12 @@ export class AlbumsController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
   ) {
-    return this.albumsService.update(+id, updateAlbumDto);
+    return this.albumsService.update(id, updateAlbumDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    return this.albumsService.remove(+id);
+    return this.albumsService.remove(id);
   }
 }

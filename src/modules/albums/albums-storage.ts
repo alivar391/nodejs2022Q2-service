@@ -1,33 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateArtistDto } from './dto/update-artist.dto';
-import { Artist } from './entities/artist.entity';
+import { UpdateAlbumDto } from './dto/update-album.dto';
+import { Album } from './entities/album.entity';
 
 @Injectable()
-export class ArtistsDataBase {
-  artists: Artist[] = [];
+export class AlbumsDataBase {
+  albums: Album[] = [];
 
-  create(artist: Artist) {
-    this.artists.push(artist);
-    return artist;
+  create(album: Album) {
+    this.albums.push(album);
+    return album;
   }
 
   findAll() {
-    return this.artists;
+    return this.albums;
   }
 
   findOne(id: string) {
-    return this.artists.find((artist) => artist.id === id);
+    return this.albums.find((album) => album.id === id);
   }
 
-  update(id: string, newArtist: UpdateArtistDto): Artist {
-    const artist = this.artists.find((artist) => artist.id === id);
-    Object.assign(artist, newArtist);
-    return artist;
+  update(id: string, newAlbum: UpdateAlbumDto): Album {
+    const album = this.albums.find((album) => album.id === id);
+    Object.assign(album, newAlbum);
+    return album;
   }
 
   delete(id: string) {
-    const length = this.artists.length;
-    this.artists = this.artists.filter((item) => item.id !== id);
-    return length === this.artists.length;
+    const length = this.albums.length;
+    this.albums = this.albums.filter((item) => item.id !== id);
+    return length === this.albums.length;
   }
 }
