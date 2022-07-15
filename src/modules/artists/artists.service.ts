@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ArtistsDataBase } from './artists-storage';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
@@ -22,14 +22,26 @@ export class ArtistsService {
   }
 
   findOne(id: string) {
-    return this.artistsDataBase.findOne(id);
+    const artist = this.artistsDataBase.findOne(id);
+    if (!artist) {
+      throw new NotFoundException('Not found');
+    }
+    return artist;
   }
 
   update(id: string, updateArtistDto: UpdateArtistDto) {
+    const artist = this.artistsDataBase.findOne(id);
+    if (!artist) {
+      throw new NotFoundException('Not found');
+    }
     return this.artistsDataBase.update(id, updateArtistDto);
   }
 
   remove(id: string) {
+    const artist = this.artistsDataBase.findOne(id);
+    if (!artist) {
+      throw new NotFoundException('Not found');
+    }
     return this.artistsDataBase.delete(id);
   }
 }

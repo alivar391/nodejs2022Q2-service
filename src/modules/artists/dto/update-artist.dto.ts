@@ -4,9 +4,6 @@ import { CreateArtistDto } from './create-artist.dto';
 
 export class UpdateArtistDto extends PartialType(CreateArtistDto) {
   @IsString()
-  id: string;
-
-  @IsString()
   name: string;
 
   @IsBoolean()

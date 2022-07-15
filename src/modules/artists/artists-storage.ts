@@ -19,7 +19,7 @@ export class ArtistsDataBase {
     return this.artists.find((artist) => artist.id === id);
   }
 
-  update(id: string, newArtist: UpdateArtistDto) {
+  update(id: string, newArtist: UpdateArtistDto): Artist {
     const artist = this.artists.find((artist) => artist.id === id);
     Object.assign(artist, newArtist);
     return artist;
