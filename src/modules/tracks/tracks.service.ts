@@ -1,26 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
+import { v4 as uuidv4 } from 'uuid';
+import { Track } from './entities/track.entity';
+import { TracksDataBase } from './tracks-storage';
 
 @Injectable()
 export class TracksService {
-  create(createTrackDto: CreateTrackDto) {
-    return 'This action adds a new track';
+  constructor(private readonly tracksDataBase: TracksDataBase) {}
+
+  create(createTrackDto: CreateTrackDto): Track {
+    const newTrack = {
+      id: uuidv4(),
+      ...createTrackDto,
+    };
+    return this.tracksDataBase.create(newTrack);
   }
 
   findAll() {
-    return `This action returns all tracks`;
+    return this.tracksDataBase.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} track`;
+  findOne(id: string) {
+    const track = this.tracksDataBase.findOne(id);
+    if (!track) {
+      throw new NotFoundException('Not found');
+    }
+    return track;
   }
 
-  update(id: number, updateTrackDto: UpdateTrackDto) {
-    return `This action updates a #${id} track`;
+  update(id: string, updateTrackDto: UpdateTrackDto) {
+    const track = this.tracksDataBase.findOne(id);
+    if (!track) {
+      throw new NotFoundException('Not found');
+    }
+    return this.tracksDataBase.update(id, updateTrackDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} track`;
+  remove(id: string) {
+    const track = this.tracksDataBase.findOne(id);
+    if (!track) {
+      throw new NotFoundException('Not found');
+    }
+    return this.tracksDataBase.delete(id);
   }
 }
