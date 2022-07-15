@@ -19,7 +19,7 @@ export class UsersDataBase {
     return this.users.find((user) => user.id === id);
   }
 
-  update(id: string, newUser: UpdateUserDto): User {
+  update(id: string, newUser: User): User {
     const user = this.users.find((user) => user.id === id);
     Object.assign(user, newUser);
     return user;

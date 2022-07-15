@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   HttpCode,
@@ -36,7 +36,7 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @HttpCode(HttpStatus.OK)
   update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -23,7 +27,11 @@ export class UsersService {
   }
 
   findAll() {
-    return this.usersDataBase.findAll();
+    const allUsers = this.usersDataBase.findAll().map((user) => {
+      const { password, ...userRes } = user;
+      return userRes;
+    });
+    return allUsers;
   }
 
   findOne(id: string) {
@@ -31,7 +39,8 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('Not found');
     }
-    return user;
+    const { password, ...userRes } = user;
+    return userRes;
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
@@ -39,7 +48,18 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('Not found');
     }
-    return this.usersDataBase.update(id, updateUserDto);
+
+    if (user.password !== updateUserDto.oldPassword) {
+      throw new ForbiddenException('Wrong password');
+    }
+    const newUser: User = {
+      ...user,
+      password: updateUserDto.newPassword,
+      version: user.version + 1,
+      updatedAt: +new Date(),
+    };
+    const { password, ...userRes } = this.usersDataBase.update(id, newUser);
+    return userRes;
   }
 
   remove(id: string) {
