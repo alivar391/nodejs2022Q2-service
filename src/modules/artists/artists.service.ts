@@ -11,8 +11,8 @@ export class ArtistsService {
 
   create(createArtistDto: CreateArtistDto): Artist {
     const newArtist = {
-      ...createArtistDto,
       id: uuidv4(),
+      ...createArtistDto,
     };
     return this.artistsDataBase.create(newArtist);
   }
