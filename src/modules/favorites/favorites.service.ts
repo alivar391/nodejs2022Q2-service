@@ -14,37 +14,53 @@ export class FavoritesService {
     private readonly artistsService: ArtistsService,
     private readonly albumsService: AlbumsService,
     private readonly tracksService: TracksService,
+    private readonly artistsDataBase: ArtistsDataBase,
+    private readonly albumsDataBase: AlbumsDataBase,
+    private readonly tracksDataBase: TracksDataBase,
   ) {}
 
   addArtistToFavorites(id: string) {
-    const artist = this.artistsService.findOne(id);
+    const artist = this.artistsDataBase.findOne(id);
     if (!artist) {
       throw new UnprocessableEntityException('Not found');
     }
     this.favoritesDataBase.addArtistToFavorites(id);
-    return artist;
+    return { id: id };
   }
 
   addAlbumToFavorites(id: string) {
-    const album = this.albumsService.findOne(id);
+    const album = this.albumsDataBase.findOne(id);
     if (!album) {
       throw new UnprocessableEntityException('Not found');
     }
-    this.favoritesDataBase.addArtistToFavorites(id);
-    return album;
+    this.favoritesDataBase.addAlbumToFavorites(id);
+    return { id: id };
   }
 
   addTrackToFavorites(id: string) {
-    const track = this.tracksService.findOne(id);
+    console.log(111);
+    console.log(id);
+    console.log(this.tracksDataBase.tracks);
+    const track = this.tracksDataBase.findOne(id);
+    console.log(track);
     if (!track) {
       throw new UnprocessableEntityException('Not found');
     }
-    this.favoritesDataBase.addArtistToFavorites(id);
-    return track;
+    this.favoritesDataBase.addTrackToFavorites(id);
+    return { id: id };
   }
 
   findAll() {
-    return this.favoritesDataBase.findAll();
+    const artists = this.artistsService.findAll();
+    const tracks = this.tracksService.findAll();
+    const albums = this.albumsService.findAll();
+    const favorites = this.favoritesDataBase.findAll();
+    const answer = {
+      artists: artists.filter((item) => favorites.artists.includes(item.id)),
+      albums: albums.filter((item) => favorites.albums.includes(item.id)),
+      tracks: tracks.filter((item) => favorites.tracks.includes(item.id)),
+    };
+    return answer;
   }
 
   removeArtistFromFavorites(id: string) {

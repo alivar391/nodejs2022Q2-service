@@ -8,6 +8,14 @@ export class FavoritesDataBase {
   albums: string[] = [];
   tracks: string[] = [];
 
+  private static instance;
+  constructor() {
+    if (!FavoritesDataBase.instance) {
+      FavoritesDataBase.instance = this;
+    }
+    Object.assign(this, FavoritesDataBase.instance);
+  }
+
   addArtistToFavorites(artistId: string) {
     this.artists.push(artistId);
     return artistId;
