@@ -6,6 +6,14 @@ import { Track } from './entities/track.entity';
 export class TracksDataBase {
   tracks: Track[] = [];
 
+  private static instance;
+  constructor() {
+    if (!TracksDataBase.instance) {
+      TracksDataBase.instance = this;
+    }
+    Object.assign(this, TracksDataBase.instance);
+  }
+
   create(track: Track) {
     this.tracks.push(track);
     return track;

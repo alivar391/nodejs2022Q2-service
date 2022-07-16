@@ -1,26 +1,61 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { AlbumsDataBase } from '../albums/albums-storage';
+import { AlbumsService } from '../albums/albums.service';
+import { ArtistsDataBase } from '../artists/artists-storage';
+import { ArtistsService } from '../artists/artists.service';
+import { TracksDataBase } from '../tracks/tracks-storage';
+import { TracksService } from '../tracks/tracks.service';
+import { FavoritesDataBase } from './favorites-storage';
 
 @Injectable()
 export class FavoritesService {
-  create(createFavoriteDto: CreateFavoriteDto) {
-    return 'This action adds a new favorite';
+  constructor(
+    private readonly favoritesDataBase: FavoritesDataBase,
+    private readonly artistsService: ArtistsService,
+    private readonly albumsService: AlbumsService,
+    private readonly tracksService: TracksService,
+  ) {}
+
+  addArtistToFavorites(id: string) {
+    const artist = this.artistsService.findOne(id);
+    if (!artist) {
+      throw new UnprocessableEntityException('Not found');
+    }
+    this.favoritesDataBase.addArtistToFavorites(id);
+    return artist;
+  }
+
+  addAlbumToFavorites(id: string) {
+    const album = this.albumsService.findOne(id);
+    if (!album) {
+      throw new UnprocessableEntityException('Not found');
+    }
+    this.favoritesDataBase.addArtistToFavorites(id);
+    return album;
+  }
+
+  addTrackToFavorites(id: string) {
+    const track = this.tracksService.findOne(id);
+    if (!track) {
+      throw new UnprocessableEntityException('Not found');
+    }
+    this.favoritesDataBase.addArtistToFavorites(id);
+    return track;
   }
 
   findAll() {
-    return `This action returns all favorites`;
+    return this.favoritesDataBase.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} favorite`;
+  removeArtistFromFavorites(id: string) {
+    return this.favoritesDataBase.deleteArtistFromFavorites(id);
   }
 
-  update(id: number, updateFavoriteDto: UpdateFavoriteDto) {
-    return `This action updates a #${id} favorite`;
+  removeAlbumFromFavorites(id: string) {
+    return this.favoritesDataBase.deleteAlbumFromFavorites(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} favorite`;
+  removeTrackFromFavorites(id: string) {
+    return this.favoritesDataBase.deleteTrackFromFavorites(id);
   }
 }

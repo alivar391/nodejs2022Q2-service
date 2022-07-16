@@ -6,6 +6,14 @@ import { Album } from './entities/album.entity';
 export class AlbumsDataBase {
   albums: Album[] = [];
 
+  private static instance;
+  constructor() {
+    if (!AlbumsDataBase.instance) {
+      AlbumsDataBase.instance = this;
+    }
+    Object.assign(this, AlbumsDataBase.instance);
+  }
+
   create(album: Album) {
     this.albums.push(album);
     return album;

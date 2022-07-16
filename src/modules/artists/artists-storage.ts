@@ -6,6 +6,14 @@ import { Artist } from './entities/artist.entity';
 export class ArtistsDataBase {
   artists: Artist[] = [];
 
+  private static instance;
+  constructor() {
+    if (!ArtistsDataBase.instance) {
+      ArtistsDataBase.instance = this;
+    }
+    Object.assign(this, ArtistsDataBase.instance);
+  }
+
   create(artist: Artist) {
     this.artists.push(artist);
     return artist;
