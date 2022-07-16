@@ -4,9 +4,11 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class FavoritesDataBase {
-  artists: string[] = [];
-  albums: string[] = [];
-  tracks: string[] = [];
+  base: { artists: string[]; albums: string[]; tracks: string[] } = {
+    artists: [],
+    albums: [],
+    tracks: [],
+  };
 
   private static instance;
   constructor() {
@@ -17,43 +19,39 @@ export class FavoritesDataBase {
   }
 
   addArtistToFavorites(artistId: string) {
-    this.artists.push(artistId);
+    this.base.artists.push(artistId);
     return artistId;
   }
 
   addAlbumToFavorites(albumId: string) {
-    this.albums.push(albumId);
+    this.base.albums.push(albumId);
     return albumId;
   }
 
   addTrackToFavorites(trackId: string) {
-    this.tracks.push(trackId);
+    this.base.tracks.push(trackId);
     return trackId;
   }
 
   findAll() {
-    return {
-      artists: this.artists,
-      albums: this.albums,
-      tracks: this.tracks,
-    };
+    return this.base;
   }
 
   deleteArtistFromFavorites(id: string) {
-    const length = this.artists.length;
-    this.artists = this.artists.filter((item) => item !== id);
-    return length === this.artists.length;
+    const length = this.base.artists.length;
+    this.base.artists = this.base.artists.filter((item) => item !== id);
+    return length === this.base.artists.length;
   }
 
   deleteAlbumFromFavorites(id: string) {
-    const length = this.albums.length;
-    this.albums = this.albums.filter((item) => item !== id);
-    return length === this.albums.length;
+    const length = this.base.albums.length;
+    this.base.albums = this.base.albums.filter((item) => item !== id);
+    return length === this.base.albums.length;
   }
 
   deleteTrackFromFavorites(id: string) {
-    const length = this.tracks.length;
-    this.tracks = this.tracks.filter((item) => item !== id);
-    return length === this.tracks.length;
+    const length = this.base.tracks.length;
+    this.base.tracks = this.base.tracks.filter((item) => item !== id);
+    return length === this.base.tracks.length;
   }
 }

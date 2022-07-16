@@ -4,10 +4,14 @@ import { UpdateTrackDto } from './dto/update-track.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { Track } from './entities/track.entity';
 import { TracksDataBase } from './tracks-storage';
+import { FavoritesDataBase } from '../favorites/favorites-storage';
 
 @Injectable()
 export class TracksService {
-  constructor(private readonly tracksDataBase: TracksDataBase) {}
+  constructor(
+    private readonly tracksDataBase: TracksDataBase,
+    private readonly favoritesDataBase: FavoritesDataBase,
+  ) {}
 
   create(createTrackDto: CreateTrackDto): Track {
     const newTrack = {
@@ -42,6 +46,7 @@ export class TracksService {
     if (!track) {
       throw new NotFoundException('Not found');
     }
+    this.favoritesDataBase.deleteTrackFromFavorites(id);
     return this.tracksDataBase.delete(id);
   }
 }

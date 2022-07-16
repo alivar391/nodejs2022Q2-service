@@ -38,11 +38,7 @@ export class FavoritesService {
   }
 
   addTrackToFavorites(id: string) {
-    console.log(111);
-    console.log(id);
-    console.log(this.tracksDataBase.tracks);
     const track = this.tracksDataBase.findOne(id);
-    console.log(track);
     if (!track) {
       throw new UnprocessableEntityException('Not found');
     }
