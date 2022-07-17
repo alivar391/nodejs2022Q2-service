@@ -39,19 +39,19 @@ export class FavoritesDataBase {
 
   deleteArtistFromFavorites(id: string) {
     const length = this.base.artists.length;
-    this.base.artists = this.base.artists.filter((item) => item !== id);
+    this.base.artists = this.base.artists.filter((item) => item && item !== id);
     return length === this.base.artists.length;
   }
 
   deleteAlbumFromFavorites(id: string) {
     const length = this.base.albums.length;
-    this.base.albums = this.base.albums.filter((item) => item !== id);
+    this.base.albums = this.base.albums.filter((item) => item && item !== id);
     return length === this.base.albums.length;
   }
 
   deleteTrackFromFavorites(id: string) {
     const length = this.base.tracks.length;
-    this.base.tracks = this.base.tracks.filter((item) => item !== id);
+    this.base.tracks = this.base.tracks.filter((item) => item && item !== id);
     return length === this.base.tracks.length;
   }
 }
