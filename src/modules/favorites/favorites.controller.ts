@@ -41,7 +41,9 @@ export class FavoritesController {
   @Get()
   @HttpCode(HttpStatus.OK)
   findAll() {
-    return this.favoritesService.findAll();
+    const ans = this.favoritesService.findAll();
+    console.log(ans);
+    return ans;
   }
 
   @Delete('artist/:id')

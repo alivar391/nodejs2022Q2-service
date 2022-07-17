@@ -35,13 +35,13 @@ export class FavoritesDataBase {
   }
 
   findAll() {
-    console.log(this.base.artists);
+    // console.log(this.base.artists);
     const obj = {
       artists: this.base.artists,
       albums: this.base.albums,
       tracks: this.base.tracks,
     };
-    console.log(obj);
+    // console.log(obj);
     return obj;
   }
 

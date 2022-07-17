@@ -48,7 +48,7 @@ export class FavoritesService {
 
   findAll() {
     const artists = this.artistsService.findAll();
-    console.log('====', artists);
+    // console.log('====', artists);
     const tracks = this.tracksService.findAll();
     const albums = this.albumsService.findAll();
     const favorites = this.favoritesDataBase.findAll();
@@ -60,8 +60,8 @@ export class FavoritesService {
       albums: albums,
       tracks: tracks,
     };
-    console.log('_________________________');
-    console.log(answer);
+    // console.log('_________________________');
+    // console.log(answer);
     return answer;
   }
 
