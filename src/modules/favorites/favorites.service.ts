@@ -47,21 +47,15 @@ export class FavoritesService {
   }
 
   findAll() {
-    const artists = this.artistsService.findAll();
-    // console.log('====', artists);
-    const tracks = this.tracksService.findAll();
-    const albums = this.albumsService.findAll();
+    const artists1 = this.artistsService.findAll();
+    const tracks1 = this.tracksService.findAll();
+    const albums1 = this.albumsService.findAll();
     const favorites = this.favoritesDataBase.findAll();
     const answer = {
-      // artists: artists.filter((item) => favorites.artists.includes(item.id)),
-      // albums: albums.filter((item) => favorites.albums.includes(item.id)),
-      // tracks: tracks.filter((item) => favorites.tracks.includes(item.id)),
-      artists: artists,
-      albums: albums,
-      tracks: tracks,
+      artists: artists1.filter((item) => favorites.artists.includes(item.id)),
+      albums: albums1.filter((item) => favorites.albums.includes(item.id)),
+      tracks: tracks1.filter((item) => favorites.tracks.includes(item.id)),
     };
-    // console.log('_________________________');
-    // console.log(answer);
     return answer;
   }
 
