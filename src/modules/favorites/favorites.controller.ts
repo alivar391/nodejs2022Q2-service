@@ -39,6 +39,7 @@ export class FavoritesController {
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   findAll() {
     return this.favoritesService.findAll();
   }
@@ -49,7 +50,7 @@ export class FavoritesController {
     return this.favoritesService.removeArtistFromFavorites(id);
   }
 
-  @Delete('albums/:id')
+  @Delete('album/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   removeAlbum(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return this.favoritesService.removeAlbumFromFavorites(id);

@@ -20,6 +20,7 @@ export class FavoritesDataBase {
 
   addArtistToFavorites(artistId: string) {
     this.base.artists.push(artistId);
+    console.log(this.base.artists);
     return artistId;
   }
 
@@ -34,7 +35,14 @@ export class FavoritesDataBase {
   }
 
   findAll() {
-    return this.base;
+    console.log(this.base.artists);
+    const obj = {
+      artists: this.base.artists,
+      albums: this.base.albums,
+      tracks: this.base.tracks,
+    };
+    console.log(obj);
+    return obj;
   }
 
   deleteArtistFromFavorites(id: string) {
