@@ -15,7 +15,6 @@ export class UsersService {
   constructor(private readonly usersDataBase: UsersDataBase) {}
 
   create(createUserDto: CreateUserDto): IUserResponse {
-    console.log(1);
     const { password, ...newUser } = {
       id: uuidv4(),
       ...createUserDto,
