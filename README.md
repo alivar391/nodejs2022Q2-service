@@ -10,13 +10,27 @@ git clone https://github.com/alivar391/nodejs2022Q2-service.git nodejs2022Q2-ser
 
 ```bash
 cd nodejs2022Q2-service
-git checkout develop
+git checkout docker
 npm install
 ```
 
-## Running application
+## Rename .env.example
 
 Rename .env.example file to .env
+
+## For create images in Docker and run app in container
+
+```bash
+docker-compose up
+```
+
+## For Scan Created Images
+
+```bash
+npm run scan
+```
+
+## Running application
 
 ```bash
 npm start
