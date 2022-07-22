@@ -5,16 +5,21 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+// import { User } from './entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { UsersDataBase } from './users-storage';
 import { IUserResponse } from './interfaces/user-response-interface';
+import { PrismaService } from '../../prisma.service';
+import { User, Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersDataBase: UsersDataBase) {}
+  constructor(
+    private readonly usersDataBase: UsersDataBase,
+    private prisma: PrismaService,
+  ) {}
 
-  create(createUserDto: CreateUserDto): IUserResponse {
+  async create(createUserDto: CreateUserDto): Promise<IUserResponse> {
     const { password, ...newUser } = {
       id: uuidv4(),
       ...createUserDto,
@@ -22,16 +27,18 @@ export class UsersService {
       createdAt: +new Date(),
       updatedAt: +new Date(),
     };
+    await this.prisma.user.create({ data: { password, ...newUser } });
     this.usersDataBase.create({ password, ...newUser });
     return newUser;
   }
 
   findAll() {
-    const allUsers = this.usersDataBase.findAll().map((user) => {
-      const { password, ...userRes } = user;
-      return userRes;
-    });
-    return allUsers;
+    // const allUsers = this.usersDataBase.findAll().map((user) => {
+    //   const { password, ...userRes } = user;
+    //   return userRes;
+    // });
+    // return allUsers;
+    return this.prisma.user.findMany();
   }
 
   findOne(id: string) {
