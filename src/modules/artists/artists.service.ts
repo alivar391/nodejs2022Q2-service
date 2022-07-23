@@ -3,10 +3,16 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist } from './entities/artist.entity';
 import { PrismaService } from '../../prisma.service';
+import { AlbumsService } from '../albums/albums.service';
+import { TracksService } from '../tracks/tracks.service';
 
 @Injectable()
 export class ArtistsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly albumService: AlbumsService,
+    private readonly trackService: TracksService,
+  ) {}
 
   async create(createArtistDto: CreateArtistDto): Promise<Artist> {
     const res = await this.prisma.artist.create({
@@ -44,8 +50,16 @@ export class ArtistsService {
     if (!artist) {
       throw new NotFoundException('Not found');
     }
-    this.prisma.artist.delete({ where: { id } });
+    await this.prisma.album.updateMany({
+      where: { artistId: { equals: id } },
+      data: { artistId: null },
+    });
+    await this.prisma.track.updateMany({
+      where: { artistId: { equals: id } },
+      data: { artistId: null },
+    });
 
+    await this.prisma.artist.delete({ where: { id } });
     // this.albumsDataBase
     //   .findAll()
     //   .filter((item) => item.artistId === id)

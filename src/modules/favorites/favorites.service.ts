@@ -54,7 +54,7 @@ export class FavoritesService {
     const answer = {
       // artists: artists1.filter((item) => favorites.artists.includes(item.id)),
       // albums: albums1.filter((item) => favorites.albums.includes(item.id)),
-      tracks: tracks1.filter((item) => favorites.tracks.includes(item.id)),
+      // tracks: tracks1.filter((item) => favorites.tracks.includes(item.id)),
     };
     return answer;
   }

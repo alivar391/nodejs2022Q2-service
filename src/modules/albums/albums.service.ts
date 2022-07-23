@@ -42,6 +42,11 @@ export class AlbumsService {
     if (!album) {
       throw new NotFoundException('Not found');
     }
-    this.prisma.album.delete({ where: { id } });
+
+    await this.prisma.track.updateMany({
+      where: { artistId: { equals: id } },
+      data: { artistId: null },
+    });
+    await this.prisma.album.delete({ where: { id } });
   }
 }
