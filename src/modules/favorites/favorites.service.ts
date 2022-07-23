@@ -1,22 +1,14 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { AlbumsDataBase } from '../albums/albums-storage';
 import { AlbumsService } from '../albums/albums.service';
-import { ArtistsDataBase } from '../artists/artists-storage';
 import { ArtistsService } from '../artists/artists.service';
-import { TracksDataBase } from '../tracks/tracks-storage';
 import { TracksService } from '../tracks/tracks.service';
-import { FavoritesDataBase } from './favorites-storage';
 
 @Injectable()
 export class FavoritesService {
   constructor(
-    private readonly favoritesDataBase: FavoritesDataBase,
     private readonly artistsService: ArtistsService,
     private readonly albumsService: AlbumsService,
     private readonly tracksService: TracksService,
-    private readonly artistsDataBase: ArtistsDataBase,
-    private readonly albumsDataBase: AlbumsDataBase,
-    private readonly tracksDataBase: TracksDataBase,
   ) {}
 
   addArtistToFavorites(id: string) {

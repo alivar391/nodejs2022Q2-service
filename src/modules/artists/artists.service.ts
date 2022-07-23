@@ -3,16 +3,10 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist } from './entities/artist.entity';
 import { PrismaService } from '../../prisma.service';
-import { AlbumsService } from '../albums/albums.service';
-import { TracksService } from '../tracks/tracks.service';
 
 @Injectable()
 export class ArtistsService {
-  constructor(
-    private prisma: PrismaService,
-    private readonly albumService: AlbumsService,
-    private readonly trackService: TracksService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async create(createArtistDto: CreateArtistDto): Promise<Artist> {
     const res = await this.prisma.artist.create({
