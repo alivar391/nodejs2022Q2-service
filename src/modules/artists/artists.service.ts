@@ -60,23 +60,5 @@ export class ArtistsService {
     });
 
     await this.prisma.artist.delete({ where: { id } });
-    // this.albumsDataBase
-    //   .findAll()
-    //   .filter((item) => item.artistId === id)
-    //   .map((item) => {
-    //     this.albumsDataBase.update(item.id, { ...item, artistId: null });
-    //     return { ...item, artistId: null };
-    //   });
-
-    // this.tracksDataBase
-    //   .findAll()
-    //   .filter((item) => item.artistId === id)
-    //   .map((item) => {
-    //     this.tracksDataBase.update(item.id, { ...item, artistId: null });
-    //     return { ...item, artistId: null };
-    //   });
-    // this.favoritesDataBase.deleteArtistFromFavorites(id);
-
-    // return this.artistsDataBase.delete(id);
   }
 }
