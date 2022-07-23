@@ -19,7 +19,7 @@ export class UsersService {
     private prisma: PrismaService,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<IUserResponse> {
+  async create(createUserDto: CreateUserDto) {
     const { password, ...newUser } = {
       id: uuidv4(),
       ...createUserDto,

@@ -11,6 +11,7 @@ import { TracksModule } from '../tracks/tracks.module';
 import { ArtistsDataBase } from '../artists/artists-storage';
 import { AlbumsDataBase } from '../albums/albums-storage';
 import { TracksDataBase } from '../tracks/tracks-storage';
+import { PrismaService } from 'src/prisma.service';
 
 @Module({
   controllers: [FavoritesController],
@@ -23,6 +24,7 @@ import { TracksDataBase } from '../tracks/tracks-storage';
     ArtistsDataBase,
     AlbumsDataBase,
     TracksDataBase,
+    PrismaService,
   ],
 })
 export class FavoritesModule {}

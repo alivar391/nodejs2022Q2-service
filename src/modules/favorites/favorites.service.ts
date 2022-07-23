@@ -52,7 +52,7 @@ export class FavoritesService {
     const albums1 = this.albumsService.findAll();
     const favorites = this.favoritesDataBase.findAll();
     const answer = {
-      artists: artists1.filter((item) => favorites.artists.includes(item.id)),
+      // artists: artists1.filter((item) => favorites.artists.includes(item.id)),
       albums: albums1.filter((item) => favorites.albums.includes(item.id)),
       tracks: tracks1.filter((item) => favorites.tracks.includes(item.id)),
     };
