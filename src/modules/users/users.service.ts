@@ -31,27 +31,27 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<IUserResponse> {
-    const { password, ...user } = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id },
     });
     if (!user) {
       throw new NotFoundException('Not found');
     }
-    return user;
+    const { password, ...userRes } = user;
+    return userRes;
   }
 
   async update(
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<IUserResponse> {
-    const { password, ...user } = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id },
     });
     if (!user) {
       throw new NotFoundException('Not found');
     }
-
-    if (password !== updateUserDto.oldPassword) {
+    if (user.password !== updateUserDto.oldPassword) {
       throw new ForbiddenException('Wrong password');
     }
     const newUser: User = {
