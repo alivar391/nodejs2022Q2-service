@@ -30,14 +30,14 @@ model Artist {
 }
 
 model Album {
-  id          String     @id @default(uuid())
-  name        String     @db.VarChar(255)
-  year        Int
-  artist      Artist?    @relation(fields: [artistId], references: [id], onDelete: SetNull)
-  artistId    String?
-  Track       Track[]
-  Favorites   Favorites? @relation(fields: [favoritesId], references: [id])
-  favoritesId String?
+  id         String     @id @default(uuid())
+  name       String     @db.VarChar(255)
+  year       Int
+  artist     Artist?    @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  artistId   String?
+  Track      Track[]
+  Favorites  Favorites? @relation(fields: [favoriteId], references: [id])
+  favoriteId String?
 }
 
 model Track {
