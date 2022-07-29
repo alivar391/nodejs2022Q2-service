@@ -11,7 +11,6 @@ export class FavoritesService {
       throw new UnprocessableEntityException('Not found');
     }
     const favorites = await this.prisma.favorites.findFirst();
-    console.log(favorites);
     if (!favorites) {
       await this.prisma.favorites.create({ data: {} });
     }
