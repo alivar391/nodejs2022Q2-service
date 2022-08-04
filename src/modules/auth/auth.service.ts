@@ -1,10 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { AuthDto } from './dto/auth.dto';
 import * as argon from 'argon2';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { RefreshDto } from './dto/refresh-token.dto';
+import jwt_decode from 'jwt-decode';
 
+interface Decode {
+  sub: string;
+  login: string;
+}
 @Injectable()
 export class AuthService {
   constructor(
@@ -29,13 +39,58 @@ export class AuthService {
       where: { login: authDto.login },
     });
     if (!user) {
-      throw new NotFoundException('User is not found');
+      throw new ForbiddenException('No user with this login');
     }
     const pwMatches = await argon.verify(user.password, authDto.password);
     if (!pwMatches) {
-      throw new NotFoundException('Password is not correct');
+      throw new ForbiddenException('Password is not correct');
     }
-    return this.signToken(user.id, user.login);
+    const { accessToken, refreshToken } = await this.signToken(
+      user.id,
+      user.login,
+    );
+    const rtHash = await argon.hash(refreshToken);
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        rtHash,
+      },
+    });
+    return { accessToken, refreshToken };
+  }
+
+  async refresh(refreshDto: RefreshDto) {
+    if (!refreshDto) {
+      throw new UnauthorizedException('No refresh token in the boby');
+    }
+    const decode: Decode = jwt_decode(refreshDto.refreshToken);
+    const user = await this.prisma.user.findUnique({
+      where: { id: decode.sub },
+    });
+    if (!user) {
+      throw new ForbiddenException('No user with this login');
+    }
+    const pwMatches = await argon.verify(user.rtHash, refreshDto.refreshToken);
+    if (!pwMatches) {
+      throw new ForbiddenException('Refresh token is not correct');
+    }
+
+    const { accessToken, refreshToken } = await this.signToken(
+      user.id,
+      user.login,
+    );
+    const rtHash = await argon.hash(refreshToken);
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        rtHash,
+      },
+    });
+    return { accessToken, refreshToken };
   }
 
   async signToken(

@@ -1,6 +1,4 @@
-import { PartialType } from '@nestjs/swagger';
-import { IsString, IsNotEmpty } from 'class-validator';
-import { CreateUserDto } from './create-user.dto';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class UpdateUserDto {
   @IsString()
@@ -10,4 +8,8 @@ export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
   newPassword: string; // new password
+
+  @IsString()
+  @IsOptional()
+  rtHash: string;
 }
