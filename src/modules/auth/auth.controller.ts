@@ -4,14 +4,13 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  UnauthorizedException,
   UseGuards,
-  ValidationPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
-import { RefreshDto } from './dto/refresh-token.dto';
 import { JwtRTGuard } from './guard/jwtRT.guard';
+import { rtValidationPipe } from './pipes/refresh-token.validation.pipe';
 
 @Controller('auth')
 export class AuthController {
@@ -28,19 +27,14 @@ export class AuthController {
     return this.authService.login(authDto);
   }
 
+  @UsePipes(new rtValidationPipe())
   @Post('refresh')
-  @UseGuards(JwtRTGuard)
+  // @UseGuards(JwtRTGuard) // i think it should be there
   @HttpCode(HttpStatus.OK)
   refresh(
-    @Body(
-      new ValidationPipe({
-        exceptionFactory: (errors) => {
-          return new UnauthorizedException(errors);
-        },
-      }),
-    )
-    refreshDto: RefreshDto,
+    @Body('refreshToken')
+    refreshToken: string,
   ) {
-    return this.authService.refresh(refreshDto);
+    return this.authService.refresh(refreshToken);
   }
 }

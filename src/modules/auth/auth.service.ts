@@ -1,14 +1,9 @@
-import {
-  ForbiddenException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { AuthDto } from './dto/auth.dto';
 import * as argon from 'argon2';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { RefreshDto } from './dto/refresh-token.dto';
 import jwt_decode from 'jwt-decode';
 
 interface Decode {
@@ -61,18 +56,26 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async refresh(refreshDto: RefreshDto) {
-    if (!refreshDto) {
-      throw new UnauthorizedException('No refresh token in the boby');
+  async refresh(token: string) {
+    try {
+      const verify = await this.jwt.verifyAsync(token, {
+        secret: process.env.JWT_SECRET_REFRESH_KEY,
+      });
+      console.log('verify', verify);
+      if (!verify) {
+        throw new ForbiddenException('Refresh token is not correct');
+      }
+    } catch {
+      throw new ForbiddenException('Refresh token is not correct');
     }
-    const decode: Decode = jwt_decode(refreshDto.refreshToken);
+    const decode: Decode = jwt_decode(token);
     const user = await this.prisma.user.findUnique({
       where: { id: decode.sub },
     });
     if (!user) {
       throw new ForbiddenException('No user with this login');
     }
-    const pwMatches = await argon.verify(user.rtHash, refreshDto.refreshToken);
+    const pwMatches = await argon.verify(user.rtHash, token);
     if (!pwMatches) {
       throw new ForbiddenException('Refresh token is not correct');
     }
