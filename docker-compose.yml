@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  node:
+    container_name: node
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+    - ${PORT}:${PORT}
+    depends_on:
+      - postgres
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+
+  postgres:
+    build: ./db
+    restart: unless-stopped
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_logs:/var/log/postgresql/postgresql.log
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  postgres_logs:
+  postgres_data:
