@@ -13,6 +13,8 @@ import { ArtistsController } from './modules/artists/artists.controller';
 import { FavoritesController } from './modules/favorites/favorites.controller';
 import { TracksController } from './modules/tracks/tracks.controller';
 import { UsersController } from './modules/users/users.controller';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './logger/httpexception-filter.service';
 
 @Module({
   imports: [
@@ -24,7 +26,13 @@ import { UsersController } from './modules/users/users.controller';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
